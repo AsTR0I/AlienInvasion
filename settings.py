@@ -10,3 +10,5 @@ class Settings:
         self.bg_color = (100,100,255)
         # Заголовок экрана
         self.caption = 'AliensWar'
+        # ship speed
+        self.ship_speed = 1.5
