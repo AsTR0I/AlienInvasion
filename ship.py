@@ -12,7 +12,7 @@ class Ship:
         self.image = pygame.image.load('images/ship.bmp')
         self.rect = self.image.get_rect()
         #каждый новвый корабль полявляется у нижнего края экрана
-        self.rect.center = self.screen_rect.center
+        self.rect.midbottom = self.screen_rect.midbottom
 
         self.x = float(self.rect.x)
 
@@ -31,10 +31,10 @@ class Ship:
         if self.x <= self.settings.screen_width - 60:
             if self.moving_right == True:
                 self.x += self.settings.ship_speed
-                print(self.x)
+                print(f'Координаты справа {self.x}')
         if self.x >= 0:
             if self.moving_left == True:
                 self.x -= self.settings.ship_speed
-                print(self.x)
+                print(f'Координаты слева {self.x}')
         # обновление атрибута rect на основании self.x
         self.rect.x = self.x
