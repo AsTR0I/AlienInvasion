@@ -16,8 +16,6 @@ class AlienInvasion():
         pygame.init()
         # присваиваем
         self.start_time = time.monotonic()
-        # присваиваем  self.settings класс Settings()
-        self.settings = Settings()
         # присваиваем  self.screen класс screen
         # присваимваем  self.settings класс Settings()
         self.settings = Settings()
@@ -40,9 +38,11 @@ class AlienInvasion():
         while True:
             # отслеживание событий клавиатуры и мыши
             self._check_events()
-            self._update_screen()
             self.ship.update()
             self._update_bullet()
+            self._update_alien()
+            self._update_screen()
+
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -95,6 +95,10 @@ class AlienInvasion():
                 self.bullets.remove(bullet)
             if len(self.bullets) == 0:
                 print(f'Длина снаряда = {len(self.bullets)},снаряд был удалён')
+            # alien hit test
+            # if hit then delite bullet and alien
+            collision = pygame.sprite.groupcollide(self.bullets, self.aliens,True,True)
+            print(self.bullets, self.aliens,)
 
     def _create_alien(self,alien_number, row_number):
         alien = Alien(self)
@@ -126,7 +130,23 @@ class AlienInvasion():
                 # создание пришельца и размещения его в ряду
                 self._create_alien(alien_number, row_number)
 
+    def _update_alien(self):
+        # updating all aliens position on the fleet
+        self._check_fleet_edges()
+        self.aliens.update()
 
+
+    def _check_fleet_edges(self):
+        # reacting to the edges
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+    def _change_fleet_direction(self):
+        #lowers the fleet and change fleet direction
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= - 1
     def _update_screen(self):
         '''Обновление экрана'''
         # При каждом проходе цикла перерисовывает экран
